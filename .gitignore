@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/DockerApp/FileContentIndex
+/.vs/docker_acr_appservice/FileContentIndex
