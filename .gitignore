@@ -4,3 +4,5 @@
 
 /.vs/DockerApp/FileContentIndex
 /.vs/docker_acr_appservice/FileContentIndex
+/DockerApp/bin/Debug/net8.0
+/.vs
