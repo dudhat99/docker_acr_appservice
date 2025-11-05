@@ -13,7 +13,7 @@ using System.Reflection;
 
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("bcaf34e1-dfb7-492b-a395-cdd2be8f98c8")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("DockerApp")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a46b02dd26b87c409dcc07838b22e13ccf6bea4")]
 [assembly: System.Reflection.AssemblyProductAttribute("DockerApp")]
