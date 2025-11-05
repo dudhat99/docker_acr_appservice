@@ -18,13 +18,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # ✅ Login to Azure using Service Principal
+      # Login to Azure using Service Principal
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # ✅ Login to ACR 
+      # Login to ACR 
       - name: Login to ACR
         uses: azure/docker-login@v1
         with:
@@ -32,17 +32,17 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      # ✅ Build Docker image
+      # Build Docker image
       - name: Build Docker Image
         run: |
           docker build -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} -f DockerApp/Dockerfile DockerApp
 
-      # ✅ Push image to ACR
+      # Push image to ACR
       - name: Push Docker Image
         run: |
           docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
-      # ✅ Deploy App Service to pull this latest image from ACR
+      # Deploy App Service to pull this latest image from ACR
       - name: Update App Service to use new image
         run: |
           az webapp config container set \
