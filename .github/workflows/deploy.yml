@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  ACR_LOGIN_SERVER: <azurecontaineregisterytest>.azurecr.io
+  ACR_LOGIN_SERVER: azurecontaineregisterytest.azurecr.io
   IMAGE_NAME: dockerapp
   TAG: latest
 
