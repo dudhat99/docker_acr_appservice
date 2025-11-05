@@ -1,5 +1,4 @@
 ﻿name: Build and Deploy Docker .NET App to Azure App Service
-
 on:
   push:
     branches:
