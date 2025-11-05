@@ -1,4 +1,4 @@
-name: Build and Deploy Docker .NET App to Azure App Service
+﻿name: Build and Deploy Docker .NET App to Azure App Service
 
 on:
   push:
@@ -18,13 +18,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-     # Login to Azure
-      - name: Azure Login (Service Principal)
-        uses: azure/login@v2
+      # ✅ Login to Azure using Service Principal
+      - name: Azure Login
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Login to Azure Container Registry
+      # ✅ Login to ACR
       - name: Login to ACR
         uses: azure/docker-login@v1
         with:
@@ -32,20 +32,21 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      # Build Docker image using your Dockerfile
+      # ✅ Build Docker image
       - name: Build Docker Image
         run: |
           docker build -t ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} -f DockerApp/Dockerfile DockerApp
 
-      # Push the image to ACR
+      # ✅ Push image to ACR
       - name: Push Docker Image
         run: |
           docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
-      # Deploy to Azure App Service
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: <YOUR_APP_SERVICE_NAME>
-          images: ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+      # ✅ Deploy App Service to pull this latest image from ACR
+      - name: Update App Service to use new image
+        run: |
+          az webapp config container set \
+            --name dockerdemoapp \
+            --resource-group DeleteRG \
+            --docker-custom-image-name ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
+            --docker-registry-server-url https://${{ env.ACR_LOGIN_SERVER }}
