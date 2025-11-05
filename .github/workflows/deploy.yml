@@ -1,0 +1,43 @@
+name: Build and Deploy Docker App to Azure
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Login to ACR
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/dockerapp:latest .
+
+    - name: Push image
+      run: |
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/dockerapp:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-container-deploy@v1
+      with:
+        app-name: "dockerappdemo"
+        image-name: "${{ secrets.REGISTRY_LOGIN_SERVER }}/dockerapp:latest"
